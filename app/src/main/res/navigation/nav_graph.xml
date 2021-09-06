@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/recycler_list">
+
+    <fragment
+        android:id="@+id/recycler_list"
+        android:name="ua.udevapp.libraries.sample.presentation.recycler.view.RecyclerListFragment"
+        android:label="@string/recycler_list"
+        tools:layout="@layout/fragment_recycler_list" />
+
+</navigation>
