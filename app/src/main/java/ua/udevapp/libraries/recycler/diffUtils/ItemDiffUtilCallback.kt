@@ -1,4 +1,4 @@
-package ua.udevapp.libraries.recycler.diffutils
+package ua.udevapp.libraries.recycler.diffUtils
 
 import androidx.recyclerview.widget.DiffUtil
 

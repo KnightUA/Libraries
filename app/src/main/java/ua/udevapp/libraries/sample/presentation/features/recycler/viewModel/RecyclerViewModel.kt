@@ -5,9 +5,8 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 import ua.udevapp.libraries.core.interactor.UseCase
-import ua.udevapp.libraries.sample.interactor.items.GetPhrases
+import ua.udevapp.libraries.sample.domain.interactor.items.GetPhrases
 import ua.udevapp.libraries.sample.presentation.features.recycler.model.PhrasesUiState
 import javax.inject.Inject
 

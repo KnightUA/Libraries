@@ -1,4 +1,4 @@
-package ua.udevapp.libraries.recycler.diffutils
+package ua.udevapp.libraries.recycler.diffUtils
 
 interface CompareCollections<in D> {
     fun updateCollections(old: Collection<D>?, new: Collection<D>?) {

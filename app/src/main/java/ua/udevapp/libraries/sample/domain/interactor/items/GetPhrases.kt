@@ -1,4 +1,4 @@
-package ua.udevapp.libraries.sample.interactor.items
+package ua.udevapp.libraries.sample.domain.interactor.items
 
 import ua.udevapp.libraries.core.exceptions.Failure
 import ua.udevapp.libraries.core.functional.Either
