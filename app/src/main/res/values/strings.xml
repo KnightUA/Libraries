@@ -2,4 +2,6 @@
     <string name="app_name">Libraries</string>
     <string name="activity_navigation">Navigation</string>
     <string name="recycler_list">Recycler List</string>
+    <string name="action_retry">Retry</string>
+    <string name="failure_request">The request failed. Please try again!</string>
 </resources>
