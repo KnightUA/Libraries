@@ -1,4 +1,4 @@
-package ua.udevapp.samples.presentation.navigation.view
+package ua.udevapp.samples.ui.navigation.view
 
 import androidx.appcompat.app.AppCompatActivity
 import by.kirich1409.viewbindingdelegate.viewBinding

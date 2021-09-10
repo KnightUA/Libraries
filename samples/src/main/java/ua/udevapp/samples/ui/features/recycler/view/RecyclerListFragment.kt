@@ -1,4 +1,4 @@
-package ua.udevapp.samples.presentation.features.recycler.view
+package ua.udevapp.samples.ui.features.recycler.view
 
 import android.os.Bundle
 import android.view.View
@@ -10,9 +10,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import ua.udevapp.libraries.R
 import ua.udevapp.core.extensions.collect
 import ua.udevapp.libraries.databinding.FragmentRecyclerListBinding
-import ua.udevapp.samples.presentation.features.recycler.model.PhrasesUiState
-import ua.udevapp.samples.presentation.features.recycler.viewModel.RecyclerViewModel
-import ua.udevapp.samples.presentation.recycler.adapter.items.PhrasesRecyclerAdapter
+import ua.udevapp.samples.ui.features.recycler.model.PhrasesUiState
+import ua.udevapp.samples.ui.features.recycler.viewModel.RecyclerViewModel
+import ua.udevapp.samples.ui.recycler.adapter.items.PhrasesRecyclerAdapter
 
 @AndroidEntryPoint
 class RecyclerListFragment : Fragment(R.layout.fragment_recycler_list) {
@@ -32,13 +32,13 @@ class RecyclerListFragment : Fragment(R.layout.fragment_recycler_list) {
 
     private fun initViews() {
         with(binding) {
-            itemsList.adapter = adapter
+            listItems.adapter = adapter
         }
     }
 
     private fun initListeners() {
         with(binding) {
-            btnRetry.setOnClickListener { viewModel.fetchPhrases() }
+            listItems.setOnClickListener { viewModel.fetchPhrases() }
         }
     }
 
@@ -51,9 +51,9 @@ class RecyclerListFragment : Fragment(R.layout.fragment_recycler_list) {
     private fun renderPhrasesState(phrasesUiState: PhrasesUiState?) {
         phrasesUiState?.let { state ->
             with(binding) {
-                itemsList.isVisible = state is PhrasesUiState.Success
+                listItems.isVisible = state is PhrasesUiState.Success
                 progress.isVisible = state is PhrasesUiState.Progress
-                failureGroup.isVisible = state is PhrasesUiState.Error
+                groupFailure.isVisible = state is PhrasesUiState.Error
 
                 if(state is PhrasesUiState.Success) {
                     adapter.updateAll(state.phrases)

@@ -13,7 +13,7 @@
         android:theme="@style/Theme.Libraries">
 
         <activity
-            android:name="ua.udevapp.samples.presentation.navigation.view.NavigationActivity"
+            android:name="ua.udevapp.samples.ui.navigation.view.NavigationActivity"
             android:label="@string/screen_navigation"
             android:exported="true">
             <intent-filter>

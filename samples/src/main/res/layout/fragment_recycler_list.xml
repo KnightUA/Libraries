@@ -3,16 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context="ua.udevapp.samples.ui.features.recycler.view.RecyclerListFragment">
 
     <androidx.constraintlayout.widget.Group
-        android:id="@+id/failure_group"
+        android:id="@+id/group_failure"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="tv_failure, btn_retry" />
+        app:constraint_referenced_ids="text_failure, button_retry"
+        tools:visibility="gone" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/items_list"
+        android:id="@+id/list_items"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:visibility="gone"
@@ -21,7 +23,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="gone" />
+        tools:listitem="@layout/item_phrase"
+        tools:visibility="visible" />
 
     <ProgressBar
         android:id="@+id/progress"
@@ -32,10 +35,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible" />
+        tools:visibility="gone" />
 
     <TextView
-        android:id="@+id/tv_failure"
+        android:id="@+id/text_failure"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
@@ -50,7 +53,7 @@
         tools:visibility="visible" />
 
     <Button
-        android:id="@+id/btn_retry"
+        android:id="@+id/button_retry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
@@ -60,7 +63,7 @@
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_failure"
+        app:layout_constraintTop_toBottomOf="@id/text_failure"
         tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

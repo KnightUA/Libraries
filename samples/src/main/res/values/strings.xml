@@ -1,5 +1,5 @@
-<resources>
-    <string name="app_name">Libraries</string>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:shrinkMode="strict">
+<string name="app_name">Libraries</string>
 
     <string name="screen_navigation">Navigation</string>
     <string name="screen_recycler_list">Recycler List</string>
