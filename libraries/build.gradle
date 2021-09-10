@@ -1,0 +1,8 @@
+plugins {
+    id 'org.jetbrains.dokka'
+}
+
+tasks.dokkaHtmlMultiModule.configure {
+    moduleName.set("Libraries")
+    outputDirectory.set(file("../documentation/html"))
+}
