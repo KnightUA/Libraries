@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/recycler_list"
         android:name="ua.udevapp.samples.presentation.features.recycler.view.RecyclerListFragment"
-        android:label="@string/recycler_list"
+        android:label="@string/screen_recycler_list"
         tools:layout="@layout/fragment_recycler_list" />
 
 </navigation>

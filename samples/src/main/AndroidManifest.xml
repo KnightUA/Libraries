@@ -14,7 +14,7 @@
 
         <activity
             android:name="ua.udevapp.samples.presentation.navigation.view.NavigationActivity"
-            android:label="@string/activity_navigation"
+            android:label="@string/screen_navigation"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

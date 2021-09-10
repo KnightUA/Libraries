@@ -40,7 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="8dp"
-        android:text="@string/failure_request"
+        android:text="@string/error_request"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
