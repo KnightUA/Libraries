@@ -15,7 +15,7 @@ inline val <M> Collection<M>.lastPosition : Int? get() = if(isEmpty()) null else
  *
  * Make copy of existing collection
  *
- * @param M can be any type which used in {Collection}
+ * @param M can be any type which used in [Collection]
  * @return new collection without references on previous ones
  */
 fun <M> Collection<M>.copy(): Collection<M> = run {
@@ -25,8 +25,9 @@ fun <M> Collection<M>.copy(): Collection<M> = run {
 
 /**
  *
- * Create a new empty Collection
+ * Create a new empty [Collection]
  *
+ * @param M can be any type
  * @return an new empty Collection
  */
 fun <M> emptyCollection(): Collection<M> {
@@ -35,7 +36,7 @@ fun <M> emptyCollection(): Collection<M> {
 
 /**
  *
- * Convert exist Collection to safe collection without @null
+ * Convert exist [Collection] to safe collection without @null
  *
  * @param M can be any type and nullable
  * @return a new Collection without @null models
@@ -47,8 +48,9 @@ fun <M> Collection<M?>?.safeCollection(): Collection<M> {
 
 /**
  *
- * Insert in collection new item at position
+ * Insert in [Collection] new item at position
  *
+ * @param M can be any type
  * @param positionInsert is a position where need to insert item
  * @param itemInsert is a item which will be inserted in list
  * @throws Nothing when position out of range and item is @null
@@ -69,29 +71,33 @@ fun <M> MutableCollection<M>.insertAt(positionInsert: Int, itemInsert: M?) {
 
 /**
  *
- * Remove in collection exist item at position
+ * Remove in [Collection] exist item at position
  *
+ * @param M can be any type
  * @param positionRemove is a position where item is located for remove it
  * @throws Nothing when position out of range and item is @null
  */
 fun <M> MutableCollection<M>.removeAt(positionRemove: Int) {
     if (positionRemove !in this.indices) return Timber.w("Out of range position: trying to remove item at $positionRemove where $size size")
 
+    var modelRemove:M? = null
     forEachIndexed searchIndexOfModel@{ index, model ->
         if (index == positionRemove) {
-            remove(model)
+            modelRemove = model
             return@searchIndexOfModel
         }
     }
+
+    modelRemove?.let { remove(it) }
 }
 
 /**
  *
  * Replace in collection exist item to a new one at position
  *
+ * @param M can be any type
  * @param positionReplace is a position where need to replace item
  * @param itemReplace is a item which will be replaced in list
- * @throws Nothing when position out of range and item is @null
  */
 fun <M> MutableCollection<M>.replaceAt(positionReplace: Int, itemReplace: M?) {
     if (positionReplace !in this.indices) return Timber.w("Out of range position: trying to replace item at $positionReplace where $size size")
@@ -99,4 +105,20 @@ fun <M> MutableCollection<M>.replaceAt(positionReplace: Int, itemReplace: M?) {
 
     removeAt(positionReplace)
     insertAt(positionReplace, itemReplace)
+}
+
+/**
+ *
+ * Fetch item from collection at position
+ *
+ * @param M can be any type
+ * @param position from which need to fetch item
+ * @return item or @null if not found
+ */
+fun <M> Collection<M>.getItemAt(position: Int): M? {
+    forEachIndexed { index, item ->
+        if (position == index) return item
+    }
+
+    return null
 }

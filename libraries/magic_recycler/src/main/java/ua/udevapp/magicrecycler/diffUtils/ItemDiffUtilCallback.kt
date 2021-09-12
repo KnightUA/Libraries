@@ -1,6 +1,7 @@
 package ua.udevapp.magicrecycler.diffUtils
 
 import androidx.recyclerview.widget.DiffUtil
+import ua.udevapp.core.extensions.getItemAt
 
 abstract class ItemDiffUtilCallback<in D> : DiffUtil.Callback, CompareCollections<D> {
     private val _oldCollection: MutableCollection<D>
@@ -39,13 +40,5 @@ abstract class ItemDiffUtilCallback<in D> : DiffUtil.Callback, CompareCollection
     override fun updateNewCollection(collection: Collection<D>) {
         _newCollection.clear()
         _newCollection.addAll(collection)
-    }
-
-    private fun Collection<D>.getItemAt(position: Int): D? {
-        forEachIndexed { index, item ->
-            if (position == index) return item
-        }
-
-        return null
     }
 }

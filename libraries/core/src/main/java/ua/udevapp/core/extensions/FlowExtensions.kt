@@ -8,9 +8,22 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-inline fun <reified F> Fragment.collect(uiState: Flow<F>, crossinline handler: (F) -> Unit) {
+/**
+ * Simplify call from [Fragment] to collect all [Flow] data
+ *
+ * @param FM is model type which used in [Flow]
+ * @param uiState is a flow from which you want to collect data
+ * @param handler is a function which will handle state changes
+ * @param lifecycleState (optional) - when need to invoke collect function
+ * @see repeatOnLifecycle where you find information about lifecycleState usage
+ */
+inline fun <reified FM> Fragment.collect(
+    uiState: Flow<FM>,
+    crossinline handler: (FM) -> Unit,
+    lifecycleState: Lifecycle.State = Lifecycle.State.STARTED
+) {
     lifecycleScope.launch {
-        repeatOnLifecycle(Lifecycle.State.STARTED) {
+        repeatOnLifecycle(lifecycleState) {
             uiState.collect { handler.invoke(it) }
         }
     }
