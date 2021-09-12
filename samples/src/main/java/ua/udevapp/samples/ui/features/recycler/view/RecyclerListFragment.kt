@@ -38,7 +38,7 @@ class RecyclerListFragment : Fragment(R.layout.fragment_recycler_list) {
 
     private fun initListeners() {
         with(binding) {
-            listItems.setOnClickListener { viewModel.fetchPhrases() }
+            buttonRetry.setOnClickListener { viewModel.fetchPhrases() }
         }
     }
 
@@ -56,7 +56,7 @@ class RecyclerListFragment : Fragment(R.layout.fragment_recycler_list) {
                 groupFailure.isVisible = state is PhrasesUiState.Error
 
                 if(state is PhrasesUiState.Success) {
-                    adapter.updateAll(state.phrases)
+                    adapter.replaceAll(state.phrases)
                 }
             }
         }

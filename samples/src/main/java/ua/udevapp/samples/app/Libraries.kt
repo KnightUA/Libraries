@@ -36,7 +36,6 @@ class Libraries : Application() {
                     .detectLeakedSqlLiteObjects()
                     .detectLeakedClosableObjects()
                     .penaltyLog()
-                    .penaltyDeath()
                     .build()
             )
         }

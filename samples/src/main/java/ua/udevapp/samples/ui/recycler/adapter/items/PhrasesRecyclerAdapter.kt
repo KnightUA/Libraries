@@ -9,7 +9,10 @@ import ua.udevapp.samples.ui.recycler.viewHolder.PhraseViewHolder
 import java.lang.ref.WeakReference
 
 class PhrasesRecyclerAdapter : CollectionRecyclerAdapter<Phrase, PhraseViewHolder>() {
-    override val _collection: MutableCollection<Phrase> = mutableListOf()
+    override val collectionData: MutableCollection<Phrase> = mutableListOf()
+
+    override val areItemsTheSame: ((newItem: Phrase?, existItem: Phrase) -> Boolean) =
+        { newItem, existItem -> newItem?.id == existItem.id }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhraseViewHolder {
         val inflater = WeakReference(LayoutInflater.from(parent.context)).get()
