@@ -9,7 +9,7 @@ import timber.log.Timber
  * @param M can be any type
  * @return last position of collection
  */
-inline val <M> Collection<M>.lastPosition : Int? get() = if(isEmpty()) null else size - 1
+inline val <M> Collection<M>.lastPosition: Int? get() = if (isEmpty()) null else size - 1
 
 /**
  *
@@ -25,13 +25,39 @@ fun <M> Collection<M>.copy(): Collection<M> = run {
 
 /**
  *
- * Create a new empty [Collection]
+ * Creates a new empty [Collection]
  *
  * @param M can be any type
  * @return an new empty Collection
  */
 fun <M> emptyCollection(): Collection<M> {
-    return emptyList<M>().copy()
+    return emptyList()
+}
+
+/**
+ *
+ * Creates a new [MutableCollection]
+ *
+ * @param M can be any type
+ * @return an new mutable Collection
+ */
+fun <M> mutableCollectionOf(vararg elements: M): MutableCollection<M> {
+    val collection = mutableListOf<M>()
+    elements.forEach { collection.add(it) }
+    return collection
+}
+
+/**
+ *
+ * Convert exist [Collection] to new Mutable Collection
+ *
+ * @param M can be any type
+ * @return a new mutable Collection
+ */
+fun <M> Collection<M>.toMutableCollection(): MutableCollection<M> {
+    val elements = mutableListOf<M>()
+    copy().forEach { elements.add(it) }
+    return elements
 }
 
 /**
@@ -57,7 +83,7 @@ fun <M> Collection<M?>?.safeCollection(): Collection<M> {
  */
 fun <M> MutableCollection<M>.insertAt(positionInsert: Int, itemInsert: M?) {
     if (positionInsert !in this.indices) return Timber.w("Out of range position: trying to add item at $positionInsert where $size size")
-    if(itemInsert == null) return Timber.w("Inserted item is Null!")
+    if (itemInsert == null) return Timber.w("Inserted item is Null!")
 
     val mutableCollection = mutableListOf<M>()
     forEachIndexed { index, model ->
@@ -80,7 +106,7 @@ fun <M> MutableCollection<M>.insertAt(positionInsert: Int, itemInsert: M?) {
 fun <M> MutableCollection<M>.removeAt(positionRemove: Int) {
     if (positionRemove !in this.indices) return Timber.w("Out of range position: trying to remove item at $positionRemove where $size size")
 
-    var modelRemove:M? = null
+    var modelRemove: M? = null
     forEachIndexed searchIndexOfModel@{ index, model ->
         if (index == positionRemove) {
             modelRemove = model
@@ -101,7 +127,7 @@ fun <M> MutableCollection<M>.removeAt(positionRemove: Int) {
  */
 fun <M> MutableCollection<M>.replaceAt(positionReplace: Int, itemReplace: M?) {
     if (positionReplace !in this.indices) return Timber.w("Out of range position: trying to replace item at $positionReplace where $size size")
-    if(itemReplace == null) return Timber.w("New item is Null!")
+    if (itemReplace == null) return Timber.w("New item is Null!")
 
     removeAt(positionReplace)
     insertAt(positionReplace, itemReplace)

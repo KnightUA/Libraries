@@ -30,7 +30,13 @@ interface RecyclerAdapterCollection<M> {
     /**
      * Function which checks items by some unique identifier
      */
-    val areItemsTheSame: ((newItem: M?, existItem: M) -> Boolean)?
+    val areItemsTheSame: ((newItem: M, existItem: M) -> Boolean)?
+
+    /**
+     * Function which checks same items by their content.
+     * It is an optional, as by Default will use [equals] operator
+     */
+    val areContentsTheSame: ((newItem: M, existItem: M) -> Boolean)?
 
     /**
      * Clear all items in existing [Collection]
@@ -56,7 +62,7 @@ interface RecyclerAdapterCollection<M> {
     /**
      * Insert [Collection] of items at the existing position of existing [MutableCollection]
      *
-     * @param positionStart - the existing position in [MutableCollection] from which need to past data.
+     * @param positionStart is the existing position in [MutableCollection] from which need to past data.
      * Will do nothing if [positionStart] is out of range
      *
      * @param items which need to insert at the [positionStart].
@@ -67,7 +73,7 @@ interface RecyclerAdapterCollection<M> {
     /**
      * Insert item at the existing position of existing [MutableCollection]
      *
-     * @param position - the existing position in [MutableCollection] where need to past [item].
+     * @param position is the existing position in [MutableCollection] where need to past [item].
      * Will do nothing if [position] is out of range
      *
      * @param item which need to insert at the [position].
@@ -136,7 +142,7 @@ interface RecyclerAdapterCollection<M> {
     /**
      * Remove item from the existing [MutableCollection] at existing position
      *
-     * @param position - the existing position in [MutableCollection] which item need to remove from it.
+     * @param position is the existing position in [MutableCollection] which item need to remove from it.
      * Will do nothing if [position] is out of range
      */
     fun removeItemAt(position: Int)
@@ -149,8 +155,8 @@ interface RecyclerAdapterCollection<M> {
     /**
      * Remove range of items from the existing [MutableCollection]
      *
-     * @param positionStart - the existing position in [MutableCollection] from which need to start removing items
-     * @param positionEndInclusive - the existing position in [MutableCollection] to which need end removing items inclusive
+     * @param positionStart is the existing position in [MutableCollection] from which need to start removing items
+     * @param positionEndInclusive is the existing position in [MutableCollection] to which need end removing items inclusive
      * Will do nothing if [positionStart] and [positionEndInclusive] is out of range
      */
     fun removeItemRange(positionStart: Int, positionEndInclusive: Int)
@@ -158,7 +164,7 @@ interface RecyclerAdapterCollection<M> {
     /**
      * Fetch an item from the existing [MutableCollection] by [position]
      *
-     * @param position - the existing item position in [MutableCollection]
+     * @param position is the existing item position in [MutableCollection]
      * Will return @null if [position] is out of range
      *
      * @return [M] if found item at [position], or @null if not found
@@ -168,7 +174,7 @@ interface RecyclerAdapterCollection<M> {
     /**
      * Fetch the position from the existing [item] in [MutableCollection]
      *
-     * @param item - the existing item in [MutableCollection]
+     * @param item is the existing item in [MutableCollection]
      * @return position of existing item or negative value if nothing found. Same for @null item
      */
     fun getPositionOf(item: M?): Int
@@ -177,11 +183,11 @@ interface RecyclerAdapterCollection<M> {
      * Fetch an item from the existing [MutableCollection] by [predicate].
      * Used in update operations as [updateItem], [updateAll] and [replaceAll]
      *
-     * @param predicate - condition for find correct item in [MutableCollection]
+     * @param predicate is condition for find correct item in [MutableCollection]
      * @see [DiffUtil.Callback.areItemsTheSame] mandatory must be ID or other field which will be unique and identify item without content
      * @return [M] if found item by [predicate], or negative value if not found
      */
-    fun getPositionOfItemBy(lookingItem: M?, predicate: (lookingItem: M?, existItem: M) -> Boolean): Int
+    fun getPositionOfItemBy(lookingItem: M?, predicate: (lookingItem: M, existItem: M) -> Boolean): Int
 
     /**
      * First clear all data then add new items [Collection]

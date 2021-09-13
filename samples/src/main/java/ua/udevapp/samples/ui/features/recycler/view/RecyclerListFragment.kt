@@ -56,7 +56,7 @@ class RecyclerListFragment : Fragment(R.layout.fragment_recycler_list) {
                 groupFailure.isVisible = state is PhrasesUiState.Error
 
                 if(state is PhrasesUiState.Success) {
-                    adapter.replaceAll(state.phrases)
+                    adapter.updateAll(state.phrases)
                 }
             }
         }

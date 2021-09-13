@@ -1,9 +1,11 @@
 package ua.udevapp.magicrecycler.adapter
 
 import android.view.View
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import timber.log.Timber
 import ua.udevapp.core.extensions.*
+import ua.udevapp.magicrecycler.diffUtils.ItemDiffUtilCallback
 import ua.udevapp.magicrecycler.listeners.OnItemClickListener
 import ua.udevapp.magicrecycler.listeners.OnItemLongClickListener
 import ua.udevapp.magicrecycler.listeners.RecyclerAdapterListeners
@@ -19,7 +21,29 @@ abstract class CollectionRecyclerAdapter<M, VM> : RecyclerView.Adapter<VM>(),
     override var onItemLongClickListener: OnItemLongClickListener<M> =
         OnItemLongClickListener { model: M, view: View? -> Timber.d("Item long click: model = $model, view = $view") }
 
-    override val areItemsTheSame: ((newItem: M?, existItem: M) -> Boolean)? = null
+    override val areItemsTheSame: ((newItem: M, existItem: M) -> Boolean)? get() = null
+    override val areContentsTheSame: ((newItem: M, existItem: M) -> Boolean)? get() = null
+
+    /**
+     * Created from [ItemDiffUtilCallback.Builder] as abstraction builder.
+     * Depends on [areItemsTheSame], if this function isn't initialized it won't create it and be @null.
+     * Also reuse function [areContentsTheSame] if it's initialized too. Otherwise will use [equals] as default behaviour
+     * @see ItemDiffUtilCallback
+     */
+    protected val _itemDiffUtil: ItemDiffUtilCallback<M>? = kotlin.run {
+        areItemsTheSame?.let {
+            ItemDiffUtilCallback.Builder(areItemsTheSame = it,
+                areContentsTheSame = areContentsTheSame
+                    ?: { newItem, existItem -> newItem == existItem })
+                .build()
+        }
+    }
+
+    /**
+     * Will use diff utils callback if this property is true.
+     * Note: this doesn't mean that it will be used, as [_itemDiffUtil] can be @null
+     */
+    protected var hasDiffUtilEnabled: Boolean = false
 
     override fun getItemCount(): Int {
         return all.size
@@ -29,12 +53,29 @@ abstract class CollectionRecyclerAdapter<M, VM> : RecyclerView.Adapter<VM>(),
         getItemAt(position)?.let { model -> holder.bind(model) }
     }
 
+    private fun tryUseDiffUtilWith(previousData: Collection<M>): Unit? {
+        return tryUseDiffUtilWith(previousData, collectionData.copy())
+    }
+
+    private fun tryUseDiffUtilWith(previousData: Collection<M>, newData: Collection<M>): Unit? {
+        if (!hasDiffUtilEnabled) return null
+
+        return _itemDiffUtil?.let { diffUtilCallback ->
+            collectionData.clear()
+            collectionData.addAll(newData)
+
+            diffUtilCallback.updateCollections(previousData, collectionData)
+            val diffResult = DiffUtil.calculateDiff(diffUtilCallback)
+            diffResult.dispatchUpdatesTo(this)
+        }
+    }
+
     override fun clear() {
         val previousData = collectionData.copy()
 
         collectionData.clear()
 
-        notifyItemRangeRemoved(START_POSITION, itemCount)
+        tryUseDiffUtilWith(previousData) ?: notifyItemRangeRemoved(START_POSITION, itemCount)
 
         Timber.d("clear")
         Timber.d("previousData: $previousData")
@@ -47,7 +88,10 @@ abstract class CollectionRecyclerAdapter<M, VM> : RecyclerView.Adapter<VM>(),
 
         collectionData.addAll(safeItems)
 
-        notifyItemRangeInserted(previousData.size, safeItems.size)
+        tryUseDiffUtilWith(previousData) ?: notifyItemRangeInserted(
+            previousData.size,
+            safeItems.size
+        )
 
         Timber.d("addAll: $items")
         Timber.d("previousData: $previousData")
@@ -61,7 +105,8 @@ abstract class CollectionRecyclerAdapter<M, VM> : RecyclerView.Adapter<VM>(),
 
         collectionData.add(item)
 
-        collectionData.lastPosition?.let { notifyItemInserted(it) }
+        tryUseDiffUtilWith(previousData)
+            ?: collectionData.lastPosition?.let { notifyItemInserted(it) }
 
         Timber.d("addItem: $item")
         Timber.d("previousData: $previousData")
@@ -76,7 +121,7 @@ abstract class CollectionRecyclerAdapter<M, VM> : RecyclerView.Adapter<VM>(),
             collectionData.insertAt(positionStart + index, model)
         }
 
-        notifyItemRangeInserted(positionStart, safeItems.size)
+        tryUseDiffUtilWith(previousData) ?: notifyItemRangeInserted(positionStart, safeItems.size)
 
         Timber.d("insertAllAt: $items from position = $positionStart")
         Timber.d("previousData: $previousData")
@@ -90,7 +135,7 @@ abstract class CollectionRecyclerAdapter<M, VM> : RecyclerView.Adapter<VM>(),
 
         collectionData.insertAt(position, item)
 
-        notifyItemInserted(position)
+        tryUseDiffUtilWith(previousData) ?: notifyItemInserted(position)
 
         Timber.d("insertItemAt: $position, item = $item")
         Timber.d("previousData: $previousData")
@@ -100,22 +145,26 @@ abstract class CollectionRecyclerAdapter<M, VM> : RecyclerView.Adapter<VM>(),
     override fun replaceAll(items: Collection<M?>?) {
         val safeItems = items.safeCollection()
         val previousData = collectionData.copy()
-        val updatedPositions = mutableSetOf<Int>()
 
-        safeItems.forEach { model ->
-            updateItem(model)
-            val position = getPositionOf(model)
-            if(position > 0) {
-                updatedPositions.add(position)
+        tryUseDiffUtilWith(previousData, safeItems) ?: run {
+            val updatedPositions = mutableSetOf<Int>()
+
+            safeItems.forEach { model ->
+                updateItem(model)
+                val position = getPositionOf(model)
+                if (position > 0) {
+                    updatedPositions.add(position)
+                }
+            }
+
+            Timber.d("updatedPositions: $updatedPositions")
+
+            for (index in collectionData.indices.reversed()) {
+                if (index !in updatedPositions)
+                    removeItemAt(index)
             }
         }
 
-        for(index in collectionData.indices.reversed()) {
-            if(index !in updatedPositions)
-                removeItemAt(index)
-        }
-
-        Timber.d("updatedPositions: $updatedPositions")
         Timber.d("updateAll: $items")
         Timber.d("previousData: $previousData")
         Timber.d("currentData: $collectionData")
@@ -137,7 +186,8 @@ abstract class CollectionRecyclerAdapter<M, VM> : RecyclerView.Adapter<VM>(),
     override fun updateItem(item: M?) {
         if (item == null) return Timber.w("Item is Null!")
 
-        val positionItem = areItemsTheSame?.let { getPositionOfItemBy(item, it) } ?: getPositionOf(item)
+        val positionItem =
+            areItemsTheSame?.let { getPositionOfItemBy(item, it) } ?: getPositionOf(item)
         if (positionItem < 0) {
             Timber.w("Not found position of item = $item")
             return addItem(item)
@@ -154,7 +204,7 @@ abstract class CollectionRecyclerAdapter<M, VM> : RecyclerView.Adapter<VM>(),
 
         collectionData.replaceAt(position, item)
 
-        notifyItemChanged(position)
+        tryUseDiffUtilWith(previousData) ?: notifyItemChanged(position)
 
         Timber.d("updateItemAt: $position, item = $item")
         Timber.d("previousData: $previousData")
@@ -164,9 +214,17 @@ abstract class CollectionRecyclerAdapter<M, VM> : RecyclerView.Adapter<VM>(),
     override fun removeAll(items: Collection<M?>?) {
         val safeItems = items.safeCollection()
         val previousData = collectionData.copy()
+        val updatedData = collectionData.toMutableCollection().apply {
+            safeItems.forEach { item ->
+                val positionItem = getPositionOf(item)
+                if (positionItem > 0) removeAt(positionItem)
+            }
+        }
 
-        safeItems.forEach { model ->
-            removeItem(model)
+        tryUseDiffUtilWith(previousData, updatedData) ?: run {
+            safeItems.forEach { model ->
+                removeItem(model)
+            }
         }
 
         Timber.d("removeAll: $items")
@@ -194,7 +252,7 @@ abstract class CollectionRecyclerAdapter<M, VM> : RecyclerView.Adapter<VM>(),
 
         collectionData.removeAt(position)
 
-        notifyItemRemoved(position)
+        tryUseDiffUtilWith(previousData) ?: notifyItemRemoved(position)
 
         Timber.d("removeItemAt: $position")
         Timber.d("previousData: $previousData")
@@ -205,9 +263,16 @@ abstract class CollectionRecyclerAdapter<M, VM> : RecyclerView.Adapter<VM>(),
         if (positionStart !in all.indices || positionEndInclusive !in all.indices) return Timber.w("Out of range position: trying to remove items from $positionStart to $positionEndInclusive where ${all.size} size")
 
         val previousData = collectionData.copy()
+        val updatedData = collectionData.toMutableCollection().apply {
+            for (position in positionEndInclusive..positionStart) {
+                removeAt(position)
+            }
+        }
 
-        for (position in positionStart..positionEndInclusive) {
-            removeItemAt(position)
+        tryUseDiffUtilWith(previousData, updatedData) ?: run {
+            for (position in positionEndInclusive..positionStart) {
+                removeItemAt(position)
+            }
         }
 
         Timber.d("removeItemRange: $positionStart to $positionEndInclusive")
@@ -230,12 +295,30 @@ abstract class CollectionRecyclerAdapter<M, VM> : RecyclerView.Adapter<VM>(),
 
     override fun getPositionOfItemBy(
         lookingItem: M?,
-        predicate: (lookingItem: M?, existItem: M) -> Boolean
+        predicate: (lookingItem: M, existItem: M) -> Boolean
     ): Int {
+        if (lookingItem == null) return NO_POSITION
         return all.indexOfFirst { predicate.invoke(lookingItem, it) }
+    }
+
+    /**
+     * Enable usage of diff utils, if it is already has been setup
+     * @see hasDiffUtilEnabled for more info
+     */
+    fun enableDiffUtil() {
+        hasDiffUtilEnabled = true
+    }
+
+    /**
+     * Enable usage of diff utils, if it is already has been setup
+     * @see hasDiffUtilEnabled for more info
+     */
+    fun disableDiffUtil() {
+        hasDiffUtilEnabled = false
     }
 
     companion object {
         const val START_POSITION = 0
+        const val NO_POSITION = -1
     }
 }
