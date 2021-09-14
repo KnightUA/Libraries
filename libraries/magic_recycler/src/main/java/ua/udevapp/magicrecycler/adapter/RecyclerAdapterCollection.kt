@@ -10,17 +10,9 @@ import androidx.recyclerview.widget.DiffUtil
 interface RecyclerAdapterCollection<M> {
 
     /**
-     * Mutable collection of [M] type items.
-     * Can be replaced by any implementation of [MutableCollection] interface
-     *
-     * @see MutableCollection as this is interface to manipulate exist [Collection] of data
-     */
-    val collectionData: MutableCollection<M>
-
-    /**
      * @return Immutable [Collection] of [M] type models
      */
-    val all: Collection<M> get() = collectionData
+    val all: Collection<M>
 
     /**
      * Simple checking existing [Collection] for empty

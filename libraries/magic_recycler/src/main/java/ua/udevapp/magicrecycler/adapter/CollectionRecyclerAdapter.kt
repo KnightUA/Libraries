@@ -15,6 +15,14 @@ abstract class CollectionRecyclerAdapter<M, VM> : RecyclerView.Adapter<VM>(),
     RecyclerAdapterListeners<M>,
     RecyclerAdapterCollection<M> where VM : BinderViewHolder<M> {
 
+    /**
+     * Mutable collection of [M] type items.
+     * Can be replaced by any implementation of [MutableCollection] interface
+     *
+     * @see MutableCollection as this is interface to manipulate exist [Collection] of data
+     */
+    open protected val collectionData: MutableCollection<M> = mutableCollectionOf()
+
     override var onItemClickListener: OnItemClickListener<M> =
         OnItemClickListener { model: M, view: View? -> Timber.d("Item click: model = $model, view = $view") }
 
@@ -23,6 +31,8 @@ abstract class CollectionRecyclerAdapter<M, VM> : RecyclerView.Adapter<VM>(),
 
     override val areItemsTheSame: ((newItem: M, existItem: M) -> Boolean)? get() = null
     override val areContentsTheSame: ((newItem: M, existItem: M) -> Boolean)? get() = null
+
+    override val all: Collection<M> get() = collectionData
 
     /**
      * Created from [ItemDiffUtilCallback.Builder] as abstraction builder.
