@@ -27,7 +27,7 @@ abstract class CollectionRecyclerAdapter<M, VM> : RecyclerView.Adapter<VM>(),
         OnItemClickListener { model: M, view: View? -> Timber.d("Item click: model = $model, view = $view") }
 
     override var onItemLongClickListener: OnItemLongClickListener<M> =
-        OnItemLongClickListener { model: M, view: View? -> Timber.d("Item long click: model = $model, view = $view") }
+        OnItemLongClickListener { model: M, view: View? -> Timber.d("Item long click: model = $model, view = $view")}
 
     override val areItemsTheSame: ((newItem: M, existItem: M) -> Boolean)? get() = null
     override val areContentsTheSame: ((newItem: M, existItem: M) -> Boolean)? get() = null

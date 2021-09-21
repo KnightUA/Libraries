@@ -12,7 +12,7 @@ import ua.udevapp.magicrecycler.listeners.RecyclerAdapterListeners
  * @param action is a function to handle click and receive triggered view and bound item
  */
 inline fun <M> RecyclerAdapterListeners<M>.doOnItemViewClick(crossinline action: (item: M, view: View?) -> Unit) =
-    addItemClickListener(onItemViewClick = action)
+    setItemClickListener(onItemViewClick = action)
 
 /**
  *
@@ -21,7 +21,7 @@ inline fun <M> RecyclerAdapterListeners<M>.doOnItemViewClick(crossinline action:
  * @param action is a function to handle click and receive only triggered view
  */
 inline fun <M> RecyclerAdapterListeners<M>.doOnViewClick(crossinline action: (view: View?) -> Unit) =
-    addItemClickListener(onViewClick = action)
+    setItemClickListener(onViewClick = action)
 
 /**
  *
@@ -30,14 +30,14 @@ inline fun <M> RecyclerAdapterListeners<M>.doOnViewClick(crossinline action: (vi
  * @param action is a function to handle click and receive only bound item
  */
 inline fun <M> RecyclerAdapterListeners<M>.doOnItemClick(crossinline action: (item: M) -> Unit) =
-    addItemClickListener(onItemClick = action)
+    setItemClickListener(onItemClick = action)
 
 /**
  *
  * General function to add click listeners
  *
  */
-inline fun <M> RecyclerAdapterListeners<M>.addItemClickListener(
+inline fun <M> RecyclerAdapterListeners<M>.setItemClickListener(
     crossinline onItemViewClick: (item: M, view: View?) -> Unit = { _, _ -> },
     crossinline onViewClick: (view: View?) -> Unit = { _ -> },
     crossinline onItemClick: (item: M) -> Unit = {},
@@ -56,7 +56,7 @@ inline fun <M> RecyclerAdapterListeners<M>.addItemClickListener(
  * @param action is a function to handle click and receive triggered view and bound item
  */
 inline fun <M> RecyclerAdapterListeners<M>.doOnItemViewLongClick(crossinline action: (item: M, view: View?) -> Unit) =
-    addItemLongClickListener(onItemViewLongClick = action)
+    setItemLongClickListener(onItemViewLongClick = action)
 
 /**
  *
@@ -65,7 +65,7 @@ inline fun <M> RecyclerAdapterListeners<M>.doOnItemViewLongClick(crossinline act
  * @param action is a function to handle long click and receive only triggered view
  */
 inline fun <M> RecyclerAdapterListeners<M>.doOnViewLongClick(crossinline action: (view: View?) -> Unit) =
-    addItemLongClickListener(onViewLongClick = action)
+    setItemLongClickListener(onViewLongClick = action)
 
 /**
  *
@@ -74,14 +74,14 @@ inline fun <M> RecyclerAdapterListeners<M>.doOnViewLongClick(crossinline action:
  * @param action is a function to handle long click and receive only bound item
  */
 inline fun <M> RecyclerAdapterListeners<M>.doOnItemLongClick(crossinline action: (item: M) -> Unit) =
-    addItemLongClickListener(onItemLongClick = action)
+    setItemLongClickListener(onItemLongClick = action)
 
 /**
  *
  * General function to add long click listeners
  *
  */
-inline fun <M> RecyclerAdapterListeners<M>.addItemLongClickListener(
+inline fun <M> RecyclerAdapterListeners<M>.setItemLongClickListener(
     crossinline onItemViewLongClick: (item: M, view: View?) -> Unit = { _, _ -> },
     crossinline onViewLongClick: (view: View?) -> Unit = { _ -> },
     crossinline onItemLongClick: (item: M) -> Unit = {}

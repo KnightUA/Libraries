@@ -48,7 +48,7 @@ class RecyclerViewModel @Inject constructor(private val getPhrases: GetPhrases) 
     }
 
     companion object {
-        val phrasesForReplace = listOf<Phrase>(
+        val phrasesForReplace = listOf(
             Phrase(
                 id = 3,
                 value = "v2: Jaws of Death",

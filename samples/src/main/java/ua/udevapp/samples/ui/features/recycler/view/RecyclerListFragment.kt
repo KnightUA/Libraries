@@ -7,9 +7,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 import ua.udevapp.libraries.R
 import ua.udevapp.core.extensions.collect
 import ua.udevapp.libraries.databinding.FragmentRecyclerListBinding
+import ua.udevapp.magicrecycler.extensions.setItemClickListener
+import ua.udevapp.magicrecycler.extensions.setItemLongClickListener
 import ua.udevapp.samples.ui.features.recycler.model.PhrasesUiState
 import ua.udevapp.samples.ui.features.recycler.viewModel.RecyclerViewModel
 import ua.udevapp.samples.ui.recycler.adapter.items.PhrasesRecyclerAdapter
@@ -20,7 +23,10 @@ class RecyclerListFragment : Fragment(R.layout.fragment_recycler_list) {
     private val viewModel: RecyclerViewModel by viewModels()
 
     private val adapter by lazy(LazyThreadSafetyMode.NONE) {
-        return@lazy PhrasesRecyclerAdapter()
+        return@lazy PhrasesRecyclerAdapter().apply {
+            setItemClickListener { Timber.i("Click on item $it") }
+            setItemLongClickListener { Timber.i("Long click on item $it") }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

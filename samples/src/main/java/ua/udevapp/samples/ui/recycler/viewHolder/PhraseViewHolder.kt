@@ -10,6 +10,9 @@ class PhraseViewHolder(private val binding: ItemPhraseBinding) :
         with(binding) {
             textValue.text = model.value
             textDefinition.text = model.definition
+
+            root.setupOnItemClickListenerWith(model)
+            root.setupOnItemLongClickListenerWith(model)
         }
     }
 }

@@ -11,11 +11,13 @@ import java.lang.ref.WeakReference
 class PhrasesRecyclerAdapter : CollectionRecyclerAdapter<Phrase, PhraseViewHolder>() {
     override val collectionData: MutableCollection<Phrase> = mutableListOf()
 
-    override val areItemsTheSame: (newItem: Phrase, existItem: Phrase) -> Boolean get() =
-        { newItem, existItem -> newItem.id == existItem.id }
+    override val areItemsTheSame: (newItem: Phrase, existItem: Phrase) -> Boolean
+        get() =
+            { newItem, existItem -> newItem.id == existItem.id }
 
-    override val areContentsTheSame: (newItem: Phrase, existItem: Phrase) -> Boolean get() =
-        {newItem, existItem -> newItem == existItem }
+    override val areContentsTheSame: (newItem: Phrase, existItem: Phrase) -> Boolean
+        get() =
+            { newItem, existItem -> newItem == existItem }
 
     init {
         enableDiffUtil()
