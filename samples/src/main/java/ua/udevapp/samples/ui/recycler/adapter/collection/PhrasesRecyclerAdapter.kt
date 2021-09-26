@@ -1,4 +1,4 @@
-package ua.udevapp.samples.ui.recycler.adapter.items
+package ua.udevapp.samples.ui.recycler.adapter.collection
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

@@ -1,4 +1,4 @@
-package ua.udevapp.samples.ui.features.recycler.view
+package ua.udevapp.samples.ui.features.recycler.collection.view
 
 import android.os.Bundle
 import android.view.View
@@ -13,14 +13,15 @@ import ua.udevapp.core.extensions.collect
 import ua.udevapp.libraries.databinding.FragmentRecyclerListBinding
 import ua.udevapp.magicrecycler.extensions.setItemClickListener
 import ua.udevapp.magicrecycler.extensions.setItemLongClickListener
-import ua.udevapp.samples.ui.features.recycler.model.PhrasesUiState
-import ua.udevapp.samples.ui.features.recycler.viewModel.RecyclerViewModel
-import ua.udevapp.samples.ui.recycler.adapter.items.PhrasesRecyclerAdapter
+import ua.udevapp.samples.ui.features.recycler.collection.model.PhrasesUiState
+import ua.udevapp.samples.ui.features.recycler.collection.viewModel.RecyclerViewModel
+import ua.udevapp.samples.ui.features.recycler.multiTypes.viewModel.MultiTypesRecyclerViewModel
+import ua.udevapp.samples.ui.recycler.adapter.collection.PhrasesRecyclerAdapter
 
 @AndroidEntryPoint
 class RecyclerListFragment : Fragment(R.layout.fragment_recycler_list) {
     private val binding by viewBinding(FragmentRecyclerListBinding::bind)
-    private val viewModel: RecyclerViewModel by viewModels()
+    private val recyclerViewModel: RecyclerViewModel by viewModels()
 
     private val adapter by lazy(LazyThreadSafetyMode.NONE) {
         return@lazy PhrasesRecyclerAdapter().apply {
@@ -44,12 +45,12 @@ class RecyclerListFragment : Fragment(R.layout.fragment_recycler_list) {
 
     private fun initListeners() {
         with(binding) {
-            buttonRetry.setOnClickListener { viewModel.fetchPhrases() }
+            buttonRetry.setOnClickListener { recyclerViewModel.fetchPhrases() }
         }
     }
 
     private fun collectStates() {
-        with(viewModel) {
+        with(recyclerViewModel) {
             collect(phrasesUiState, ::renderPhrasesState)
         }
     }
@@ -61,7 +62,7 @@ class RecyclerListFragment : Fragment(R.layout.fragment_recycler_list) {
                 progress.isVisible = state is PhrasesUiState.Progress
                 groupFailure.isVisible = state is PhrasesUiState.Error
 
-                if(state is PhrasesUiState.Success) {
+                if (state is PhrasesUiState.Success) {
                     adapter.updateAll(state.phrases)
                 }
             }

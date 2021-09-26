@@ -1,4 +1,4 @@
-package ua.udevapp.samples.ui.features.recycler.viewModel
+package ua.udevapp.samples.ui.features.recycler.collection.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 import ua.udevapp.core.interactor.UseCase
 import ua.udevapp.samples.data.models.items.Phrase
 import ua.udevapp.samples.domain.interactor.items.GetPhrases
-import ua.udevapp.samples.ui.features.recycler.model.PhrasesUiState
+import ua.udevapp.samples.ui.features.recycler.collection.model.PhrasesUiState
 import javax.inject.Inject
 
 @HiltViewModel

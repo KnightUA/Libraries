@@ -1,4 +1,4 @@
-package ua.udevapp.samples.ui.features.recycler.model
+package ua.udevapp.samples.ui.features.recycler.collection.model
 
 import ua.udevapp.core.exceptions.Failure
 import ua.udevapp.samples.data.models.items.Phrase

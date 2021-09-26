@@ -2,7 +2,9 @@ package ua.udevapp.samples.data.repository.items
 
 import kotlinx.coroutines.delay
 import ua.udevapp.core.exceptions.Failure
+import ua.udevapp.core.extensions.mutableCollectionOf
 import ua.udevapp.core.functional.Either
+import ua.udevapp.samples.data.models.items.Article
 import ua.udevapp.samples.data.models.items.Phrase
 import ua.udevapp.samples.exceptions.items.ReceiveListFailure
 import javax.inject.Inject
@@ -84,11 +86,55 @@ class ItemTestRepository @Inject constructor() : ItemRepository {
         )
     )
 
+    private val articles = mutableCollectionOf(
+        Article.Image(
+            "Amazing Spider-Man",
+            "https://vgtimes.ru/uploads/games_description/63961/vgtimes_ru_1601484598_50396356732_0a8174efb4_k.jpg"
+        ),
+        Article.Description("Great News!", "Something special is waiting for you in that day"),
+        Article.Description("Great News!", "Something special is waiting for you in that day"),
+        Article.Description("Great News!", "Something special is waiting for you in that day"),
+        Article.Image(
+            "Amazing Spider-Man",
+            "https://vgtimes.ru/uploads/games_description/63961/vgtimes_ru_1601484598_50396356732_0a8174efb4_k.jpg"
+        ),
+        Article.Image(
+            "Amazing Spider-Man",
+            "https://vgtimes.ru/uploads/games_description/63961/vgtimes_ru_1601484598_50396356732_0a8174efb4_k.jpg"
+        ),
+        Article.Description("Great News!", "Something special is waiting for you in that day"),
+        Article.Description("Great News!", "Something special is waiting for you in that day"),
+        Article.Description("Great News!", "Something special is waiting for you in that day"),
+        Article.Image(
+            "Amazing Spider-Man",
+            "https://vgtimes.ru/uploads/games_description/63961/vgtimes_ru_1601484598_50396356732_0a8174efb4_k.jpg"
+        ),
+        Article.Image(
+            "Amazing Spider-Man",
+            "https://vgtimes.ru/uploads/games_description/63961/vgtimes_ru_1601484598_50396356732_0a8174efb4_k.jpg"
+        ),
+        Article.Description("Great News!", "Something special is waiting for you in that day"),
+        Article.Description("Great News!", "Something special is waiting for you in that day"),
+        Article.Description("Great News!", "Something special is waiting for you in that day"),
+        Article.Image(
+            "Amazing Spider-Man",
+            "https://vgtimes.ru/uploads/games_description/63961/vgtimes_ru_1601484598_50396356732_0a8174efb4_k.jpg"
+        ),
+    )
+
     override suspend fun fetchPhrases(): Either<Failure, List<Phrase>> {
+        return phrases.withFetchingDataImitation()
+    }
+
+    override suspend fun fetchArticles(): Either<Failure, List<Article>> {
+        return articles.withFetchingDataImitation()
+    }
+
+    private suspend fun <M> Collection<M>.withFetchingDataImitation(): Either<Failure, List<M>> {
         delay(DELAY_TIME)
         val randomBoolean = Random.nextBoolean()
         return if (randomBoolean) {
-            Either.Right(phrases)
+            Either.Right(this.toList())
         } else Either.Left(ReceiveListFailure())
     }
 

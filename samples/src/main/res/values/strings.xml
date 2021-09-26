@@ -8,4 +8,6 @@
 
     <string name="action_retry">Retry</string>
     <string name="error_request">The request failed. Please try again!</string>
+    <string name="article_description">Description:</string>
+    <string name="article_content_image">Image of Article</string>
 </resources>
