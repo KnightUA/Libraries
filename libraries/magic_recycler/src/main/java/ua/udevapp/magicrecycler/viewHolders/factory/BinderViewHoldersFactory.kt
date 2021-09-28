@@ -1,20 +1,37 @@
 package ua.udevapp.magicrecycler.viewHolders.factory
 
-import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import ua.udevapp.magicrecycler.listeners.RecyclerAdapterListeners
 import ua.udevapp.magicrecycler.viewHolders.BinderViewHolder
 import kotlin.reflect.KClass
 
-abstract class BinderViewHoldersFactory {
-    abstract val supportedClasses: Collection<KClass<Any>>
+/**
+ * Factory which provides [BinderViewHolder] for specified supported model types in [supportedClasses]
+ */
+abstract class BinderViewHoldersFactory<M> where M : Any {
+    abstract val supportedClasses: Map<Int, KClass<out M>>
 
-    fun create(parent: ViewGroup, viewType: Int): BinderViewHolder<Any> {
-        return supportedClasses.find { it.simpleName.hashCode() == viewType }
-            ?.let { create(parent, it) }
+    /**
+     * Fetch kotlin class by viewType as a key
+     * @param viewType as the key in the map
+     * @return KClass for specified viewType in the [supportedClasses] map
+     */
+    @Suppress("UNCHECKED_CAST")
+    fun fetchClassForViewType(viewType: Int): KClass<out M> {
+        return supportedClasses[viewType]
             ?: error("Can't find viewType with ID $viewType in supported classes ")
     }
 
-    abstract protected fun create( parent: ViewGroup, kClass: KClass<Any>): BinderViewHolder<Any>
+    /**
+     * Create a new [BinderViewHolder] for generic [M] type
+     * @param parent which used for bind viewHolder to the root and fetch layoutInflater
+     * @param kClass which used to create state machine for different subtypes of [M] type
+     * @param listeners as an optional for setup them in [BinderViewHolder]
+     * @return new instance of [BinderViewHolder]
+     */
+    abstract fun create(
+        parent: ViewGroup,
+        kClass: KClass<out M>,
+        listeners: RecyclerAdapterListeners<out M>?
+    ): BinderViewHolder<out M>
 }

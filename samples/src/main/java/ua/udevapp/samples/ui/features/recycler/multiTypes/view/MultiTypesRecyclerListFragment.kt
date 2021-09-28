@@ -11,9 +11,12 @@ import timber.log.Timber
 import ua.udevapp.libraries.R
 import ua.udevapp.core.extensions.collect
 import ua.udevapp.libraries.databinding.FragmentRecyclerListBinding
-import ua.udevapp.magicrecycler.adapter.MultiTypesRecyclerAdapter
+import ua.udevapp.magicrecycler.adapter.MultipleTypesRecyclerAdapter
+import ua.udevapp.magicrecycler.extensions.addOnItemClickListener
 import ua.udevapp.magicrecycler.extensions.setItemClickListener
 import ua.udevapp.magicrecycler.extensions.setItemLongClickListener
+import ua.udevapp.magicrecycler.listeners.OnItemLongClickListener
+import ua.udevapp.samples.data.models.items.Article
 import ua.udevapp.samples.ui.features.recycler.multiTypes.model.ArticlesUiState
 import ua.udevapp.samples.ui.features.recycler.multiTypes.viewModel.MultiTypesRecyclerViewModel
 import ua.udevapp.samples.ui.recycler.viewHolder.factory.ArticlesViewHoldersFactory
@@ -24,9 +27,13 @@ class MultiTypesRecyclerListFragment : Fragment(R.layout.fragment_recycler_list)
     private val recyclerViewModel: MultiTypesRecyclerViewModel by viewModels()
 
     private val adapter by lazy(LazyThreadSafetyMode.NONE) {
-        return@lazy MultiTypesRecyclerAdapter(ArticlesViewHoldersFactory()).apply {
-            setItemClickListener { Timber.i("Click on item $it") }
-            setItemLongClickListener { Timber.i("Long click on item $it") }
+        return@lazy MultipleTypesRecyclerAdapter(ArticlesViewHoldersFactory()).apply {
+            addOnItemClickListener<Article.Description> { item, view ->
+                Timber.i("Clicked description $item")
+            }
+            addOnItemClickListener<Article.Image> { item, view ->
+                Timber.i("Clicked image $item")
+            }
         }
     }
 
@@ -62,7 +69,7 @@ class MultiTypesRecyclerListFragment : Fragment(R.layout.fragment_recycler_list)
                 progress.isVisible = state is ArticlesUiState.Progress
                 groupFailure.isVisible = state is ArticlesUiState.Error
 
-                if(state is ArticlesUiState.Success) {
+                if (state is ArticlesUiState.Success) {
                     adapter.updateAll(state.articles)
                 }
             }

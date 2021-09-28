@@ -42,11 +42,11 @@ inline fun <M> RecyclerAdapterListeners<M>.setItemClickListener(
     crossinline onViewClick: (view: View?) -> Unit = { _ -> },
     crossinline onItemClick: (item: M) -> Unit = {},
 ) {
-    onItemClickListener = OnItemClickListener { item, view ->
+    OnItemClickListener<M> { item, view ->
         onItemViewClick.invoke(item, view)
         onItemClick.invoke(item)
         onViewClick.invoke(view)
-    }
+    }.also { setupOnItemClickListener(it) }
 }
 
 /**
@@ -86,11 +86,9 @@ inline fun <M> RecyclerAdapterListeners<M>.setItemLongClickListener(
     crossinline onViewLongClick: (view: View?) -> Unit = { _ -> },
     crossinline onItemLongClick: (item: M) -> Unit = {}
 ) {
-
-    onItemLongClickListener =
-        OnItemLongClickListener { item, view ->
-            onItemViewLongClick.invoke(item, view)
-            onItemLongClick.invoke(item)
-            onViewLongClick.invoke(view)
-        }
+    OnItemLongClickListener<M> { item, view ->
+        onItemViewLongClick.invoke(item, view)
+        onItemLongClick.invoke(item)
+        onViewLongClick.invoke(view)
+    }.also { setupOnItemLongClickListener(it) }
 }

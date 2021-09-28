@@ -11,8 +11,11 @@ import ua.udevapp.magicrecycler.listeners.OnItemLongClickListener
 import ua.udevapp.magicrecycler.listeners.RecyclerAdapterListeners
 import ua.udevapp.magicrecycler.viewHolders.BinderViewHolder
 
+/**
+ * This core of implementation [RecyclerAdapterCollection]. Must be used in cases for extending
+ * adapters with own logic
+ */
 abstract class CollectionRecyclerAdapter<M, VM> : RecyclerView.Adapter<VM>(),
-    RecyclerAdapterListeners<M>,
     RecyclerAdapterCollection<M> where VM : BinderViewHolder<M> {
 
     /**
@@ -22,12 +25,6 @@ abstract class CollectionRecyclerAdapter<M, VM> : RecyclerView.Adapter<VM>(),
      * @see MutableCollection as this is interface to manipulate exist [Collection] of data
      */
     open protected val collectionData: MutableCollection<M> = mutableCollectionOf()
-
-    override var onItemClickListener: OnItemClickListener<M> =
-        OnItemClickListener { model: M, view: View? -> Timber.d("Item click: model = $model, view = $view") }
-
-    override var onItemLongClickListener: OnItemLongClickListener<M> =
-        OnItemLongClickListener { model: M, view: View? -> Timber.d("Item long click: model = $model, view = $view")}
 
     override val areItemsTheSame: ((newItem: M, existItem: M) -> Boolean)? get() = null
     override val areContentsTheSame: ((newItem: M, existItem: M) -> Boolean)? get() = null

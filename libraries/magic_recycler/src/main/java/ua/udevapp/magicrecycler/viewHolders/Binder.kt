@@ -5,7 +5,7 @@ package ua.udevapp.magicrecycler.viewHolders
  *
  * @param M is a model type which using for binding
  */
-interface ModelBinder<in M> {
+interface Binder<in M> {
 
     /**
      *

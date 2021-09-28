@@ -8,7 +8,7 @@ import ua.udevapp.magicrecycler.listeners.OnItemLongClickListener
 import ua.udevapp.magicrecycler.listeners.RecyclerAdapterListeners
 
 /**
- * [RecyclerView.ViewHolder] Abstraction for implementing [ModelBinder] for binding [M] data
+ * [RecyclerView.ViewHolder] Abstraction for implementing [Binder] for binding [M] data
  *
  * @param listeners is optional. Used for setup [RecyclerAdapterListeners] by using fields which there declared
  * @param M can be any type as this is a model which will be bind with UI
@@ -17,7 +17,7 @@ abstract class BinderViewHolder<M>(
     itemView: View,
     private val listeners: RecyclerAdapterListeners<M>? = null
 ) : RecyclerView.ViewHolder(itemView),
-    ModelBinder<M> {
+    Binder<M> {
 
 
     /**

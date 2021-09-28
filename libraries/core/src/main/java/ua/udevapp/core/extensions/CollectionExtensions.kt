@@ -36,6 +36,19 @@ fun <M> emptyCollection(): Collection<M> {
 
 /**
  *
+ * Creates a new [Collection]
+ *
+ * @param M can be any type
+ * @return an new immutable Collection
+ */
+fun <M> collectionOf(vararg elements: M): Collection<M> {
+    val collection = mutableListOf<M>()
+    elements.forEach { collection.add(it) }
+    return collection
+}
+
+/**
+ *
  * Creates a new [MutableCollection]
  *
  * @param M can be any type
