@@ -1,0 +1,63 @@
+apply plugin: 'maven-publish'
+
+tasks.register("sourceJar", Jar) {
+    from android.sourceSets.main.java.srcDirs
+    archiveClassifier.set('sources')
+}
+
+Properties githubProps = new Properties()
+File githubProperties = new File(rootProject.rootDir, "github.properties")
+if (githubProperties.exists() && githubProperties.isFile()) {
+    githubProperties.withInputStream { githubProps.load(it) }
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            releaseAar(MavenPublication) {
+                from components.release
+                artifact sourceJar
+
+                groupId = project.ext.groupId
+                artifactId = project.ext.artifactId
+                version = rootProject.ext.versionName
+
+                pom {
+                    name = 'Android Dev Libraries'
+                    description = 'Make to build Android project easier'
+                    url = 'https://github.com/githubUserId/project'
+
+                    licenses {
+                        license {
+                            name = 'The Apache License, Version 2.0'
+                            url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id = 'girhubUserId'
+                            name = 'Stanislav Humeniuk'
+                            email = 'stanislav.humeniuk@gmail.com'
+                        }
+                    }
+
+                    scm {
+                        url = 'https://github.com/githubUserId/project'
+                    }
+                }
+            }
+        }
+
+        repositories {
+            maven {
+                name = "githubPackages"
+                url = uri("https://maven.pkg.github.com/githubUserId/project")
+                credentials {
+                    username = githubProps.getProperty('gpr.usr') ?: System.getenv("GPR_USER")
+                    password = githubProps.getProperty('gpr.key') ?: System.getenv("GPR_API_KEY")
+                }
+            }
+        }
+    }
+}
