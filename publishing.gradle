@@ -25,7 +25,7 @@ afterEvaluate {
                 pom {
                     name = 'Android Dev Libraries'
                     description = 'Make to build Android project easier'
-                    url = 'https://github.com/UDevApp-UA/Libraries'
+                    url = 'https://github.com/KnightUA/Libraries'
 
                     licenses {
                         license {
@@ -36,14 +36,14 @@ afterEvaluate {
 
                     developers {
                         developer {
-                            id = 'girhubUserId'
+                            id = 'KnightUA'
                             name = 'Stanislav Humeniuk'
                             email = 'stanislav.humeniuk@gmail.com'
                         }
                     }
 
                     scm {
-                        url = 'https://github.com/UDevApp-UA/Libraries'
+                        url = 'https://github.com/KnightUA/Libraries'
                     }
                 }
             }
@@ -52,7 +52,7 @@ afterEvaluate {
         repositories {
             maven {
                 name = "githubPackages"
-                url = uri("https://maven.pkg.github.com/UDevApp-UA/Libraries")
+                url = uri("https://maven.pkg.github.com/KnightUA/Libraries")
                 credentials {
                     username = githubProps.getProperty('gpr.usr') ?: System.getenv("GPR_USER")
                     password = githubProps.getProperty('gpr.key') ?: System.getenv("GPR_API_KEY")
